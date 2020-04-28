@@ -13,7 +13,6 @@ WIDTH = root.winfo_screenwidth()
 HEIGHT = root.winfo_screenheight()
 
 
-<<<<<<< HEAD
 # create server socket
 server_socket = socket(AF_INET, SOCK_STREAM)
 server_socket.bind(('', 1234))
