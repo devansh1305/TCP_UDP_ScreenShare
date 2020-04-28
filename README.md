@@ -5,6 +5,5 @@ Final Project for cs422 done in Python3
 - OpenCv
 - Pillow
 - Numpy
-- Pyscreenshot
 
 `pip3 install -r requirements.txt`
