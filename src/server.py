@@ -12,16 +12,17 @@ import mss
 WIDTH = 1000
 HEIGHT = 500
 
+clients = []
 
 # create server socket
 server_socket = socket(AF_INET, SOCK_STREAM)
-server_socket.bind(('', 1234))
+server_socket.bind(('', 12345))
 
 # initiate server's ability to listen
 server_socket.listen()
-monitor = {"top": 0, "left": 0, "width": 400, "height": 400}
+monitor = {"top": 0, "left": 0, "width": 900, "height": 600}
 # function used to continuously send frames
-def send_frames(connection_socket):
+def send_frames():
     try:
         # loop to continousoly accept connections
         while True:
@@ -29,19 +30,26 @@ def send_frames(connection_socket):
             frame = numpy.array(mss.mss().grab(monitor))
             # serialize the frame
             data = zlib.compress(pickle.dumps(frame), 2)
-            # send the frame size to client
-            connection_socket.sendall((str(len(data)) + "\n").encode())
-            # send the serialized frame to client
-            connection_socket.sendall(data)
+            for client in clients:
+                try:
+                    # send the frame size to client
+                    client.sendall((str(len(data)) + "\n").encode())
+                    # send the serialized frame to client
+                    client.sendall(data)
+                except:
+                    clients.remove(client)
+                    print("removed a client from list of clients")
     except:
         return
 try:
     # loop to continousoly accept connections
+    Thread(target=send_frames, args=()).start()
     while True:
         # accept connection
         connection_socket, addr = server_socket.accept()
         # call outer func to send frames
-        Thread(target=send_frames, args=(connection_socket,)).start()
+        clients.append(connection_socket)
+        print("adding client to list of clients")
             
     # close server
 except KeyboardInterrupt:

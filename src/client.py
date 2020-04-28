@@ -13,7 +13,7 @@ HEIGHT = 500
 # create client socket
 client_socket = socket(AF_INET, SOCK_STREAM)
 # connect client socket to localhost with specified port
-client_socket.connect(("127.0.0.1", 1234))
+client_socket.connect(("127.0.0.1", 12345))
 # name a window and adjust it's size
 cv2.namedWindow("screen", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("screen", WIDTH, HEIGHT)
