@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
-import PIL
-import pyscreenshot as ImageGrab
 import pickle
+import zlib
+from PIL import ImageGrab
 from socket import *
 
 # create server socket
@@ -23,7 +23,7 @@ def send_frames(connection_socket):
             # PIL images are color as BGR, converting the color to RGB
             frame = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
             # serialize the frame
-            data = pickle.dumps(frame)
+            data = zlib.compress(pickle.dumps(frame), 5)
             # send the frame size to client
             connection_socket.sendall((str(len(data)) + "\n").encode())
             # send the serialized frame to client

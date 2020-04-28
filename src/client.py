@@ -1,5 +1,6 @@
 import cv2
 import pickle
+import zlib
 from socket import *
 
 # create client socket
@@ -25,7 +26,7 @@ while True:
         dump += client_socket.recv(min(100000, num))
         num -= min(100000, num)
     # deserialize the frame
-    frame = pickle.loads(dump)
+    frame = pickle.loads(zlib.decompress(dump))
     # display the frame
     cv2.imshow("screen", frame)
     # checks if ESC is pressed. If so, then the screen sharing window will close
