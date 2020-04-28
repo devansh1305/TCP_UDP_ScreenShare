@@ -13,6 +13,7 @@ WIDTH = root.winfo_screenwidth()
 HEIGHT = root.winfo_screenheight()
 
 
+<<<<<<< HEAD
 # create server socket
 server_socket = socket(AF_INET, SOCK_STREAM)
 server_socket.bind(('', 1234))
@@ -23,6 +24,7 @@ monitor = {"top": 0, "left": 0, "width": 600, "height": 600}
 # function used to continuously send frames
 def send_frames(connection_socket):
     try:
+        # loop to continousoly accept connections
         while True:
             # take a screenshot of current screen
             frame = numpy.array(mss.mss().grab(monitor))

@@ -10,6 +10,7 @@ root = tk.Tk()
 WIDTH = int(root.winfo_screenwidth() / 2)
 HEIGHT = int(root.winfo_screenheight() / 2)
 
+<<<<<<< HEAD
 # create client socket
 client_socket = socket(AF_INET, SOCK_STREAM)
 # connect client socket to localhost with specified port
