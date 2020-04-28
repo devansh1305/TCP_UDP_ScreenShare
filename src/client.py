@@ -1,19 +1,27 @@
+from socket import  *
+
 import cv2
 import pickle
 import zlib
-from socket import *
+import time
+import tkinter as tk
+
+root = tk.Tk()
+WIDTH = int(root.winfo_screenwidth() / 2)
+HEIGHT = int(root.winfo_screenheight() / 2)
 
 # create client socket
 client_socket = socket(AF_INET, SOCK_STREAM)
 # connect client socket to localhost with specified port
-client_socket.connect(("127.0.0.1", 12345))
+client_socket.connect(("127.0.0.1", 1234))
 # name a window and adjust it's size
 cv2.namedWindow("screen", cv2.WINDOW_NORMAL)
-cv2.resizeWindow("screen", 1440, 900)
+cv2.resizeWindow("screen", WIDTH, HEIGHT)
 try:
     # continuous loop that gets frames from the server
     while True:
         try:
+            last_time = time.time()
             num = "" # used to get the number of frame bytes to read from the server
             data = client_socket.recv(1).decode()
             dump = b''
@@ -30,6 +38,7 @@ try:
             frame = pickle.loads(zlib.decompress(dump))
             # display the frame
             cv2.imshow("screen", frame)
+            print("fps: {}".format(1 / (time.time() - last_time)))
             # checks if ESC is pressed. If so, then the screen sharing window will close
             if cv2.waitKey(1) == 27:
                 break

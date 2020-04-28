@@ -1,3 +1,5 @@
 numpy
 opencv-python
-Pillow
+pickle
+tkintertable
+mss
