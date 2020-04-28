@@ -23,20 +23,22 @@ def send_frames(connection_socket):
             # PIL images are color as BGR, converting the color to RGB
             frame = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
             # serialize the frame
-            data = zlib.compress(pickle.dumps(frame), 5)
+            data = zlib.compress(pickle.dumps(frame))
             # send the frame size to client
             connection_socket.sendall((str(len(data)) + "\n").encode())
             # send the serialized frame to client
             connection_socket.sendall(data)
     except:
         return "ok"
-
-# loop to continousoly accept connections
-while True:
-    # accept connection
-    connection_socket, addr = server_socket.accept()
-    # call outer func to send frames
-    ret = send_frames(connection_socket)
-        
-# close server
+try:
+    # loop to continousoly accept connections
+    while True:
+        # accept connection
+        connection_socket, addr = server_socket.accept()
+        # call outer func to send frames
+        ret = send_frames(connection_socket)
+            
+    # close server
+except KeyboardInterrupt:
+    pass
 server_socket.close()
