@@ -14,7 +14,7 @@ HEIGHT = 1000
 def retreive_screenshot(conn):
     with mss() as sct:
         # The region to capture
-        rect = {'top': 0, 'left': 0, 'width': WIDTH, 'height': HEIGHT}
+        rect = {'top': 0, 'left': 0, 'width': WIDTH/2, 'height': HEIGHT/2}
 
         while 'recording':
             # Capture the screen
@@ -35,7 +35,7 @@ def retreive_screenshot(conn):
             conn.sendall(pixels)
 
 
-if __name__ == '__main__':
+def screen_share_tcp():
     port = 12345
     sock = socket()
     sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -51,3 +51,15 @@ if __name__ == '__main__':
             thread.start()
     finally:
         sock.close()
+
+def screen_share_udp():
+    return
+
+if __name__ == '__main__':
+    if sys.argv[1] == "tcp":
+        screen_share_tcp()
+    elif sys.argv[1] == "udp":
+        screen_share_udp()
+    else:
+        screen_share_tcp()
+    
