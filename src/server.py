@@ -6,11 +6,11 @@ import cv2
 import pickle
 import zlib
 import mss
-import tkinter as tk
+# import tkinter as tk
 
-root = tk.Tk()
-WIDTH = root.winfo_screenwidth()
-HEIGHT = root.winfo_screenheight()
+# root = tk.Tk()
+WIDTH = 1000
+HEIGHT = 500
 
 
 # create server socket
@@ -19,7 +19,7 @@ server_socket.bind(('', 1234))
 
 # initiate server's ability to listen
 server_socket.listen()
-monitor = {"top": 0, "left": 0, "width": 600, "height": 600}
+monitor = {"top": 0, "left": 0, "width": 400, "height": 400}
 # function used to continuously send frames
 def send_frames(connection_socket):
     try:

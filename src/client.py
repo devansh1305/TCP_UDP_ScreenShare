@@ -4,11 +4,11 @@ import cv2
 import pickle
 import zlib
 import time
-import tkinter as tk
+#import tkinter as tk
 
-root = tk.Tk()
-WIDTH = int(root.winfo_screenwidth() / 2)
-HEIGHT = int(root.winfo_screenheight() / 2)
+#root = tk.Tk()
+WIDTH = 1000
+HEIGHT = 500
 
 # create client socket
 client_socket = socket(AF_INET, SOCK_STREAM)
