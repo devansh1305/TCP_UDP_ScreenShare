@@ -18,8 +18,9 @@ def recvall(conn, length):
         buf += data
     return buf
 
-
-def main(host='127.0.0.1', port=12345):
+if __name__ == '__main__':
+    host='127.0.0.1'
+    port=12345
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
@@ -48,7 +49,3 @@ def main(host='127.0.0.1', port=12345):
             clock.tick(60)
     finally:
         sock.close()
-
-
-if __name__ == '__main__':
-    main()
