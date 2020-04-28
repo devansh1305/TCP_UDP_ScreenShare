@@ -2,6 +2,7 @@ import socket
 from zlib import decompress
 
 import pygame
+import sys
 
 WIDTH = 1900
 HEIGHT = 1000

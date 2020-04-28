@@ -6,6 +6,7 @@ from zlib import compress
 
 from mss import mss
 
+import sys
 
 WIDTH = 1900
 HEIGHT = 1000
