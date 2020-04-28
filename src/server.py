@@ -1,52 +1,53 @@
-import os
-from multiprocessing import Process
-import numpy as np
-import cv2
-import pickle
-import zlib
-from PIL import ImageGrab
-from socket import *
+from socket import socket
+from socket import SOL_SOCKET
+from socket import SO_REUSEADDR
+from threading import Thread
+from zlib import compress
 
-display_stream = 0 
+from mss import mss
 
-if __name__=="__main__":
 
-    display_stream = os.environ['DISPLAY']
+WIDTH = 1900
+HEIGHT = 1000
 
-    # create server socket
-    server_socket = socket(AF_INET, SOCK_STREAM)
-    server_socket.bind(('', 12345))
 
-    # initiate server's ability to listen
-    server_socket.listen()
+def retreive_screenshot(conn):
+    with mss() as sct:
+        # The region to capture
+        rect = {'top': 0, 'left': 0, 'width': WIDTH, 'height': HEIGHT}
 
-    # function used to continuously send frames
-    def send_frames(connection_socket):
-        try:
-            while True:
-                # take a screenshot of current screen
-                img = ImageGrab.grab() # note the screenshot is stored as a PIL image
-                # converts screenshot into a byte array
-                img_np = np.array(img)
-                # PIL images are color as BGR, converting the color to RGB
-                frame = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
-                # serialize the frame
-                data = zlib.compress(pickle.dumps(frame))
-                # send the frame size to client
-                connection_socket.sendall((str(len(data)) + "\n").encode())
-                # send the serialized frame to client
-                connection_socket.sendall(data)
-        except:
-            return "ok"
+        while 'recording':
+            # Capture the screen
+            img = sct.grab(rect)
+            # Tweak the compression level here (0-9)
+            pixels = compress(img.rgb, 6)
+
+            # Send the size of the pixels length
+            size = len(pixels)
+            size_len = (size.bit_length() + 7) // 8
+            conn.send(bytes([size_len]))
+
+            # Send the actual pixels length
+            size_bytes = size.to_bytes(size_len, 'big')
+            conn.send(size_bytes)
+
+            # Send pixels
+            conn.sendall(pixels)
+
+
+if __name__ == '__main__':
+    port = 12345
+    sock = socket()
+    sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+    sock.bind(('',port))
     try:
-        # loop to continousoly accept connections
-        while True:
-            # accept connection
-            connection_socket, addr = server_socket.accept()
-            # call outer func to send frames
-            ret = send_frames(connection_socket)
+        sock.listen(5)
+        print('Server started.')
 
-        # close server
-    except KeyboardInterrupt:
-        pass
-    server_socket.close()
+        while 'connected':
+            conn, addr = sock.accept()
+            print('Client connected IP:', addr)
+            thread = Thread(target=retreive_screenshot, args=(conn,))
+            thread.start()
+    finally:
+        sock.close()

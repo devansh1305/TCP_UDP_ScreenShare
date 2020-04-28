@@ -1,48 +1,54 @@
-import os
-from multiprocessing import Process
-import cv2
-import pickle
-import zlib
-from socket import *
+from socket import socket
+from zlib import decompress
+
+import pygame
+
+WIDTH = 1900
+HEIGHT = 1000
 
 
-if __name__=="__main__":
+def recvall(conn, length):
+    """ Retreive all pixels. """
 
-    display_stream = os.environ['DISPLAY']
+    buf = b''
+    while len(buf) < length:
+        data = conn.recv(length - len(buf))
+        if not data:
+            return data
+        buf += data
+    return buf
 
-    # create client socket
-    client_socket = socket(AF_INET, SOCK_STREAM)
-    # connect client socket to localhost with specified port
-    client_socket.connect(("127.0.0.1", 12345))
-    # name a window and adjust it's size
-    cv2.namedWindow("screen", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("screen", 1440, 900)
+
+def main(host='127.0.0.1', port=12345):
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    clock = pygame.time.Clock()
+    watching = True    
+
+    sock = socket()
+    sock.connect((host, port))
     try:
-        # continuous loop that gets frames from the server
-        while True:
-            try:
-                num = "" # used to get the number of frame bytes to read from the server
-                data = client_socket.recv(1).decode()
-                dump = b''
-                while data != "\n": # continue reading the frame size until new line
-                    num += data
-                    data = client_socket.recv(1).decode()
-                # convert frame size num into an int
-                num = int(num)
-                # begin reading the frame from the server
-                while num > 0: 
-                    dump += client_socket.recv(min(100000, num))
-                    num -= min(100000, num)
-                # deserialize the frame
-                frame = pickle.loads(zlib.decompress(dump))
-                # display the frame
-                cv2.imshow("screen", frame)
-                # checks if ESC is pressed. If so, then the screen sharing window will close
-                if cv2.waitKey(1) == 27:
+        while watching:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    watching = False
                     break
-            except:
-                continue
-    except KeyboardInterrupt:
-        pass
-    # close connection
-    client_socket.close()
+
+            # Retreive the size of the pixels length, the pixels length and pixels
+            size_len = int.from_bytes(sock.recv(1), byteorder='big')
+            size = int.from_bytes(sock.recv(size_len), byteorder='big')
+            pixels = decompress(recvall(sock, size))
+
+            # Create the Surface from raw pixels
+            img = pygame.image.fromstring(pixels, (WIDTH, HEIGHT), 'RGB')
+
+            # Display the picture
+            screen.blit(img, (0, 0))
+            pygame.display.flip()
+            clock.tick(60)
+    finally:
+        sock.close()
+
+
+if __name__ == '__main__':
+    main()
