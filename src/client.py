@@ -1,19 +1,50 @@
 from socket import  *
 
+import sys
 import cv2
 import pickle
 import zlib
 import time
-#import tkinter as tk
+import tkinter as tk
 
-#root = tk.Tk()
-WIDTH = 1000
-HEIGHT = 500
+'''
+
+TODO STATS:
+
+fps
+latency
+compression levels
+udp implementation
+tcp implementation
+Implementations:
+    - thread per client
+    - list of clients
+Libraries/Modules used
+    - OpenCV
+    - Pickle
+    - zlib
+    - mss
+    - tkinter (screensize only)
+    - numpy
+
+'''
+
+if len(sys.argv) < 2:
+    hostname = "DESKTOP-QHVEDFE"
+    port = 12345
+else:
+    hostname = "localhost"
+    port = sys.argv[1]
+    
+root = tk.Tk()
+WIDTH = root.winfo_screenwidth()
+HEIGHT = root.winfo_screenheight()
 
 # create client socket
 client_socket = socket(AF_INET, SOCK_STREAM)
 # connect client socket to localhost with specified port
-client_socket.connect(("127.0.0.1", 12345))
+host = gethostbyname(hostname)
+client_socket.connect((host, port))
 # name a window and adjust it's size
 cv2.namedWindow("screen", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("screen", WIDTH, HEIGHT)

@@ -1,26 +1,39 @@
 from socket import *
 from threading import Thread
-
+import sys
 import numpy
 import cv2
 import pickle
 import zlib
 import mss
-# import tkinter as tk
 
-# root = tk.Tk()
-WIDTH = 1000
-HEIGHT = 500
+TCP = 0
+UDP = 1
+
+import tkinter as tk
+root = tk.Tk()
+WIDTH = root.winfo_screenwidth()
+HEIGHT = root.winfo_screenheight()
+
+if len(sys.argv) < 2:
+    connection_type = TCP
+    port = 12345
+    compression_level = 2
+else:
+    connection_type = sys.argv[1]
+    port = sys.argv[2]
+    compression_level = sys.argv[3]
+    
 
 clients = []
 
 # create server socket
 server_socket = socket(AF_INET, SOCK_STREAM)
-server_socket.bind(('', 12345))
+server_socket.bind(('', port))
 
 # initiate server's ability to listen
 server_socket.listen()
-monitor = {"top": 0, "left": 0, "width": 900, "height": 600}
+monitor = {"top": 0, "left": 0, "width": WIDTH, "height": HEIGHT}
 # function used to continuously send frames
 def send_frames():
     try:
@@ -29,7 +42,7 @@ def send_frames():
             # take a screenshot of current screen
             frame = numpy.array(mss.mss().grab(monitor))
             # serialize the frame
-            data = zlib.compress(pickle.dumps(frame), 2)
+            data = zlib.compress(pickle.dumps(frame), compression_level)
             for client in clients:
                 try:
                     # send the frame size to client
@@ -41,9 +54,9 @@ def send_frames():
                     print("removed a client from list of clients")
     except:
         return
+t = Thread(target=send_frames, args=()).start()
 try:
     # loop to continousoly accept connections
-    Thread(target=send_frames, args=()).start()
     while True:
         # accept connection
         connection_socket, addr = server_socket.accept()
@@ -52,6 +65,7 @@ try:
         print("adding client to list of clients")
             
     # close server
-except KeyboardInterrupt:
-    pass
-server_socket.close()
+#
+except:
+    server_socket.close()
+    sys.exit(0)
