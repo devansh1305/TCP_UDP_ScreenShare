@@ -26,7 +26,25 @@ server = TCPSERVER()
 
 '''
 
-
+def send_frames_list():
+    try:
+        # loop to continousoly accept connections
+        while True:
+            # take a screenshot of current screen
+            frame = numpy.array(mss.mss().grab(monitor))
+            # serialize the frame
+            data = zlib.compress(pickle.dumps(cv2.resize(frame, (int(WIDTH * 0.75), int(HEIGHT * 0.75)))), compression_level)
+            for client in clients:
+                try:
+                    # send the frame size to client
+                    client.sendall((str(len(data)) + "\n").encode())
+                    # send the serialized frame to client
+                    client.sendall(data)
+                except:
+                    clients.remove(client)
+                    print("removed a client from list of clients")
+    except:
+        return
 
 class TCPserver:
 
@@ -34,29 +52,10 @@ class TCPserver:
         self.clients = clients
         self.ptype = process_type
 
-    def send_frames_list(self):
-        try:
-            # loop to continousoly accept connections
-            while True:
-                # take a screenshot of current screen
-                frame = numpy.array(mss.mss().grab(monitor))
-                # serialize the frame
-                data = zlib.compress(pickle.dumps(cv2.resize(frame, (int(WIDTH * 0.75), int(HEIGHT * 0.75)))), compression_level)
-                for client in clients:
-                    try:
-                        # send the frame size to client
-                        client.sendall((str(len(data)) + "\n").encode())
-                        # send the serialized frame to client
-                        client.sendall(data)
-                    except:
-                        clients.remove(client)
-                        print("removed a client from list of clients")
-        except:
-            return
-
     def run(self):
         if self.ptype=="list":
             t = Thread(target=send_frames_list, args=()).start()
+            print("started thread...")
             try:
                 while True:
                     connection_socket, addr = server_socket.accept()
@@ -89,6 +88,8 @@ if __name__ == "__main__":
     server_socket.bind(('', port))
     # initiate server's ability to listen
     server_socket.listen()
+    a = TCPserver(clients,process_type="list")
+    a.run()
 
 
 # function used to continuously send frames
