@@ -47,7 +47,7 @@ host = gethostbyname(hostname)
 client_socket.connect((host, port))
 # name a window and adjust it's size
 cv2.namedWindow("screen", cv2.WINDOW_NORMAL)
-cv2.resizeWindow("screen", WIDTH, HEIGHT)
+cv2.resizeWindow("screen", int(WIDTH * 0.75), (HEIGHT * 0.75))
 try:
     # continuous loop that gets frames from the server
     while True:

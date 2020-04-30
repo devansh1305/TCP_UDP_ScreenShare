@@ -41,7 +41,7 @@ class TCPserver:
                 # take a screenshot of current screen
                 frame = numpy.array(mss.mss().grab(monitor))
                 # serialize the frame
-                data = zlib.compress(pickle.dumps(frame), compression_level)
+                data = zlib.compress(pickle.dumps(cv2.resize(frame, (int(WIDTH * 0.75), int(HEIGHT * 0.75)))), compression_level)
                 for client in clients:
                     try:
                         # send the frame size to client
