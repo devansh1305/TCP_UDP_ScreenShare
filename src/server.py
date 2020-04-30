@@ -26,44 +26,50 @@ server = TCPSERVER()
 
 '''
 
-def send_frames_list():
-    try:
-        # loop to continousoly accept connections
-        while True:
-            # take a screenshot of current screen
-            frame = numpy.array(mss.mss().grab(monitor))
-            # serialize the frame
-            data = zlib.compress(pickle.dumps(cv2.resize(frame, (int(WIDTH * 0.75), int(HEIGHT * 0.75)))), compression_level)
-            for client in clients:
-                try:
-                    # send the frame size to client
-                    client.sendall((str(len(data)) + "\n").encode())
-                    # send the serialized frame to client
-                    client.sendall(data)
-                except:
-                    clients.remove(client)
-                    print("removed a client from list of clients")
-    except:
-        return
+
 
 class TCPserver:
-
     def __init__(self,clients,process_type):
         self.clients = clients
         self.ptype = process_type
 
+    def send_frames_list(self):
+        try:
+            # loop to continousoly accept connections
+            while True:
+                #print("inside fr")
+                # take a screenshot of current screen
+                frame = numpy.array(mss.mss().grab(monitor))
+                # serialize the frame
+                data = zlib.compress(pickle.dumps(cv2.resize(frame, (int(WIDTH * 0.75), int(HEIGHT * 0.75)))), compression_level)
+                for client in clients:
+                    try:
+                        # send the frame size to client
+                        client.sendall((str(len(data)) + "\n").encode())
+                        # send the serialized frame to client
+                        client.sendall(data)
+                    except:
+                        clients.remove(client)
+                        print("removed a client from list of clients")
+                        if(len(clients)==0): 
+                            print("last client removed")
+                            continue
+        except:
+            return
+
     def run(self):
         if self.ptype=="list":
-            t = Thread(target=send_frames_list, args=()).start()
-            print("started thread...")
             try:
                 while True:
                     connection_socket, addr = server_socket.accept()
                     clients.append(connection_socket)
                     print("adding client to list of clients")
+                    t = Thread(target=self.send_frames_list, args=()).start()
+                    print("started thread...")
             except:
+                print("socket closed")
                 server_socket.close()
-                sys.exit(0)
+                #sys.exit(0)
 
 
 
