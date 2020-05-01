@@ -6,11 +6,12 @@ import cv2
 import pickle
 import zlib
 import mss
+import tkinter as tk
+
 
 LIST = 0
 THREAD = 1
 
-import tkinter as tk
 
 class TCPServer():
 

@@ -107,7 +107,7 @@ if len(sys.argv) == 3:
     tcp_client.run()
 elif len(sys.argv) == 2 and sys.argv[1] == "TEST":
     TEST = False
-    hostname = "kevins-MBP-2.nyc.rr.com"
+    hostname = ""
     port = 12345
     tcp_client0 = TCPClient(hostname, port).run()
     # tcp_client1 = TCPClient(hostname, port).run()
