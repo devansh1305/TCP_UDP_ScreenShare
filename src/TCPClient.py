@@ -8,31 +8,13 @@ import time
 import tkinter as tk
 import numpy
 
-TEST = False
-client_count = 0
-fps_count = 0
-fps = []
-'''
 
-TODO STATS:
 
-fps
-latency
-compression levels
-udp implementation
-tcp implementation
-Implementations:
-    - thread per client
-    - list of clients
-Libraries/Modules used
-    - OpenCV
-    - Pickle
-    - zlib
-    - mss
-    - tkinter (screensize only)
-    - numpy
+TEST = False # used for collecting data
+client_count = 0 # used for collecting data
+fps_count = 0 # used for collecting data
+fps = [] # used for collecting data
 
-'''
 
 class TCPClient():
 
@@ -45,11 +27,13 @@ class TCPClient():
         self.screen_height = height
     
     def set_full_screen(self):
+        # get screen size
         root = tk.Tk()
         self.screen_width = root.winfo_screenwidth()
         self.screen_height = root.winfo_screenheight()
 
     def resize_window(self):
+        # resize the window that will show the screen sharing
         cv2.namedWindow("screen", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("screen", self.screen_width, self.screen_height)
 
