@@ -6,7 +6,6 @@ import struct
 import math
 import mss
 import cv2 as cv
-import numpy
 import tkinter as tk
 from PIL import ImageGrab
 
@@ -24,17 +23,14 @@ class FrameSegment(object):
     def udp_frame(self, img):
         # Compress image and Break down
         # into data segments 
-        img_compress = cv.imencode('.png', img)[1]
+        img_compress = cv.imencode('.jpg', img)[1]
         data = img_compress.tostring()
         size_of_img = len(data)
         count = math.ceil(size_of_img/(self.IMG_DATA_SIZE_MAX))
         buf_sent = 0
         while count:
             array_pos_end = min(size_of_img, buf_sent + self.IMG_DATA_SIZE_MAX)
-            self.my_server.sendto(struct.pack("B", count) +
-                data[buf_sent:array_pos_end], 
-                (self.addr, self.port)
-                )
+            self.my_server.sendto(struct.pack("B", count) + data[buf_sent:array_pos_end], (self.addr, self.port))
             buf_sent = array_pos_end
             count -= 1
 
@@ -42,9 +38,11 @@ class FrameSegment(object):
 if __name__ == "__main__":
     """ Top level main function """
     # Set up UDP socket
-    root = tk.Tk()
-    width = root.winfo_screenwidth()
-    height = root.winfo_screenheight()
+    width = 1000
+    height = 600
+    # root = tk.Tk()
+    # width = root.winfo_screenwidth()
+    # height = root.winfo_screenheight()
     my_server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     my_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     host = ""
@@ -58,16 +56,17 @@ if __name__ == "__main__":
 
     fs = FrameSegment(my_server, port, host)
 
-    while True:
-        # Get the screen capture
-        # bbox specifies specific region (bbox= x,y,width,height *starts top-left)
-        img = ImageGrab.grab(bbox=(0,0,width,height)) 
-        frame = np.array(img)
-        # frame = cv.cvtColor(img_np, cv.COLOR_BGR2GRAY)
-        # monitor = {"top": 0, "left": 0, "width": width, "height": height}
-        # screenshot = mss.mss().grab(monitor) 
-        # img = Image.frombytes("RGB", (screenshot.width, screenshot.height), screenshot.rgb)
-        # frame = numpy.array(mss.mss().grab(monitor))
-        fs.udp_frame(frame)
+    with mss.mss() as sct:
+        while True:
+            # Get the screen capture
+            # bbox specifies specific region (bbox= x,y,width,height *starts top-left)
+            monitor = {"top": 0, "left": 0, "width": width, "height": height}
+            frame = np.array(sct.grab(monitor))
+            #frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+            
+            # screenshot = mss.mss().grab(monitor) 
+            # img = Image.frombytes("RGB", (screenshot.width, screenshot.height), screenshot.rgb)
+            # frame = numpy.array(mss.mss().grab(monitor))
+            fs.udp_frame(frame)
     cv.destroyAllWindows()
     my_server.close()

@@ -7,7 +7,7 @@ import sys
 
 IMG_DATA_SIZE_MAX = 65536
 
-def get_buffer(my_client):
+def align_buffer(my_client):
     # Receiving all pizels
     while True:
         segment, addr = my_client.recvfrom(IMG_DATA_SIZE_MAX)
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     my_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     my_client.bind((host, port))
     data = b''
-    get_buffer(my_client)
+    align_buffer(my_client)
 
     while True:
         segment, addr = my_client.recvfrom(IMG_DATA_SIZE_MAX)
@@ -37,7 +37,7 @@ if __name__ == "__main__":
             data += segment[1:]
         else:
             data += segment[1:]
-            img = cv2.imdecode(np.frombuffer(data, dtype=np.uint8), 1)
+            img = cv2.imdecode(np.fromstring(data, dtype=np.uint8), 1)
             # img = np.frombuffer(data, dtype=np.uint8)
             cv2.imshow('frame', img)
             if cv2.waitKey(1) & 0xFF == ord('q'):
