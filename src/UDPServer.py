@@ -78,18 +78,21 @@ if __name__ == "__main__":
     my_server.settimeout(0.2)
     
     host = ""
-    port = ""
+    port = 12345
     
-    if len(sys.argv) == 2:
+    if len(sys.argv) == 2:          # - [Host]
         host = sys.argv[1]
-    elif len(sys.argv) == 3:
-        host = sys.argv[1]
+    elif len(sys.argv) == 3:        # - [Host] [Port]
+        host = sys.argv[1]          
         port = int(sys.argv[2])
+    elif len(sys.argv) == 4:        # - r [Height] [Width]
+        width = int(sys.argv[2])
+        height = int(sys.argv[3])
     # elif len(sys.argv) == 4:
     #     host = sys.argv[1]
     #     port = int(sys.argv[2])
     #     if(sys.argv[3])=="TEST": TEST =True
-    elif len(sys.argv) == 5:
+    elif len(sys.argv) == 5:        # - [Host] [Port] [Height] [Width]
         host = sys.argv[1]
         port = int(sys.argv[2])
         width = int(sys.argv[3])
