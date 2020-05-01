@@ -74,18 +74,18 @@ class TCPServer():
             print("Thread: a client has disconnected")
             return
 
-    def get_full_screen(self):
+    def set_full_screen(self):
         # get full screen capture
         root = tk.Tk()
         self.screen_width = root.winfo_screenwidth()
         self.screen_height = root.winfo_screenheight()
-        self.montior = {"top": 0, "left": 0, "width": self.screen_width, "height": self.screen_height}
+        self.monitor = {"top": 0, "left": 0, "width": self.screen_width, "height": self.screen_height}
         return (self.screen_width, self.screen_height)
 
     def run(self):
         print("Server has started...")
         if self.full_screen:
-            self.get_full_screen()
+            self.set_full_screen()
 
         # LIST implementation
         if self.type == LIST:

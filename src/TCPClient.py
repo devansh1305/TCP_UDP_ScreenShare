@@ -18,14 +18,15 @@ import numpy
 
 class TCPClient():
 
-    def __init__(self, hostname, port, width = 720, height = 480):
+    def __init__(self, hostname, port, full_screen):
         # create client socket
         self.client_socket = socket(AF_INET, SOCK_STREAM)
         # connect client socket to localhost with specified port
         self.client_socket.connect((gethostbyname(hostname), port))
-        self.screen_width = width
-        self.screen_height = height
-    
+        self.screen_width = 720
+        self.screen_height = 480
+        self.full_screen = (full_screen == 1)
+
     def set_full_screen(self):
         # get screen size
         root = tk.Tk()
@@ -39,7 +40,8 @@ class TCPClient():
 
     def run(self):
         # global client_count, fps_count, fps
-        # self.set_full_screen()
+        if self.full_screen:
+            self.set_full_screen()
         self.resize_window()
         # f = ""
         # if TEST:
@@ -86,10 +88,11 @@ class TCPClient():
             self.client_socket.close()
         # if TEST:
             # f.close()
-if len(sys.argv) == 3:
+if len(sys.argv) == 4:
     hostname = sys.argv[1]
     port = int(sys.argv[2])
-    tcp_client = TCPClient(hostname, port)
+    full_screen = int(sys.argv[3])
+    tcp_client = TCPClient(hostname, port, full_screen)
     tcp_client.run()
 elif len(sys.argv) == 2 and sys.argv[1] == "TEST":
     TEST = False
