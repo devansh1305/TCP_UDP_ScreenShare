@@ -7,6 +7,38 @@ import math
 import mss
 import cv2 as cv
 
+'''
+TODO: 
+    one client:
+        run server
+        cat client fps output to one file
+    two client:
+        run server
+        cat client 1 fps output to a file
+        cat client 2 fps output to another file
+    three client:
+        run server
+        cat client 1 fps output to a file
+        cat client 2 fps output to another file
+        ...
+    ...
+    five client:
+        ...
+
+    analyzing data:
+        one client:
+            get average of fps in fps file
+        two client:
+            get average of fps for client one
+            get average of fps for client two
+            average the two fps ^
+        three client:
+            ...
+        ...
+        five client:
+            ...
+'''
+
 # Class to fragment image frame into multiple segments
 class FrameSegment(object):
     IMG_DATA_SIZE_MAX = 65472
@@ -36,25 +68,38 @@ class FrameSegment(object):
 
 
 if __name__ == "__main__":
-    """ Top level main function """
-    # Set up UDP socket
     width = 720
     height = 480
+
+    # Set up UDP socket
     my_server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # my_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     my_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     my_server.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     my_server.settimeout(0.2)
     
     host = ""
     port = ""
-    if len(sys.argv) == 3:
+    
+    if len(sys.argv) == 2:
+        host = sys.argv[1]
+    elif len(sys.argv) == 3:
         host = sys.argv[1]
         port = int(sys.argv[2])
+    # elif len(sys.argv) == 4:
+    #     host = sys.argv[1]
+    #     port = int(sys.argv[2])
+    #     if(sys.argv[3])=="TEST": TEST =True
+    elif len(sys.argv) == 5:
+        host = sys.argv[1]
+        port = int(sys.argv[2])
+        width = int(sys.argv[3])
+        height = int(sys.argv[4])
     else:
-        host = "127.0.0.1"
+        host = ""
         port = 12345
-    my_server.bind(("",port))
+    
+    my_server.bind((host,port))
+    
     with mss.mss() as sct:
         fs = FrameSegment(my_server, port, host)
         while True:
