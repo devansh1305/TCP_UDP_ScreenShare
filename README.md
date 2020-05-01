@@ -30,4 +30,5 @@ You will need to get the hostname of your computer. You can do this by executing
 `full_screen := 0 | 1` <br/> <br/>
 `python3 TCPServer.py [port] [type] [compression_level] [full_screen]` <br/>
 - TCPClient.py <br/> <br/>
+    - There are no default assignments. You need to pass the hostname and port as arguments.
 `python3 TCPClient.py hostname port`
