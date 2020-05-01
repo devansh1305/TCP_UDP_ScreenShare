@@ -16,12 +16,13 @@ THREAD = 1
 class TCPServer():
 
     # constructor
-    def __init__(self, port, process_type, width = 720, height = 480, compression_level = 6):
+    def __init__(self, port, process_type, width = 720, height = 480, compression_level = 1, full_screen = 0):
         self.clients = []
         self.type = process_type # process type is used for choosing which implementation (LIST or THREAD)
         self.screen_width = width # width the of screen capture
         self.screen_height = height # height of screen capture
         self.compression_level = compression_level # compression level
+        self.full_screen = (full_screen == 1)
         # draw a capture screen
         self.monitor = {"top": 0, "left": 0, "width": self.screen_width, "height": self.screen_height}
 
@@ -83,7 +84,8 @@ class TCPServer():
 
     def run(self):
         print("Server has started...")
-        # self.get_full_screen()
+        if self.full_screen:
+            self.get_full_screen()
 
         # LIST implementation
         if self.type == LIST:
@@ -127,6 +129,9 @@ if __name__ == '__main__':
     elif len(sys.argv) == 4:
         process_type = LIST if (sys.argv[2] == "LIST") else THREAD
         tcp_server = TCPServer(int(sys.argv[1]), process_type, 720, 480, int(sys.argv[3]))
+    elif len(sys.argv) == 5:
+         process_type = LIST if (sys.argv[2] == "LIST") else THREAD
+        tcp_server = TCPServer(int(sys.argv[1]), process_type, 720, 480, int(sys.argv[3]), int(sys.argv[4]))
     else:
         print("Invalid Arguments")
         sys.exit(1)
