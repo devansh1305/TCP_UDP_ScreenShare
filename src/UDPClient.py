@@ -31,8 +31,11 @@ if __name__ == "__main__":
         port = 12345
 
     # Set up socket
-    my_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    my_client.bind((host, port))
+    my_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    # my_client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+    my_client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    my_client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    my_client.bind(("", port))
     data = b''
     align_buffer(my_client)
     f = ""

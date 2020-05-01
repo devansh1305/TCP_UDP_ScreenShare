@@ -25,7 +25,12 @@ class FrameSegment(object):
         buf_sent = 0
         while count:
             array_pos_end = min(size_of_img, buf_sent + self.IMG_DATA_SIZE_MAX)
-            self.my_server.sendto(struct.pack("B", count) + data[buf_sent:array_pos_end], (self.addr, self.port))
+            # Instead of sending data to each client, we will just broadcast for better efficiency
+            # This removes the need to implement threads and hence resulting in better performance
+            self.my_server.sendto(
+                struct.pack("B", count) + data[buf_sent:array_pos_end], 
+                ('<broadcast>', self.port)
+            )
             buf_sent = array_pos_end
             count -= 1
 
@@ -36,7 +41,11 @@ if __name__ == "__main__":
     width = 720
     height = 480
     my_server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # my_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     my_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    my_server.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    my_server.settimeout(0.2)
+    
     host = ""
     port = ""
     if len(sys.argv) == 3:
@@ -45,10 +54,9 @@ if __name__ == "__main__":
     else:
         host = "127.0.0.1"
         port = 12345
-
-    fs = FrameSegment(my_server, port, host)
-
+    my_server.bind(("",port))
     with mss.mss() as sct:
+        fs = FrameSegment(my_server, port, host)
         while True:
             # Get the screen capture
             # bbox specifies specific region (bbox= x,y,width,height *starts top-left)
