@@ -23,8 +23,8 @@ You will need to get the hostname of your computer. You can do this by executing
     - The default port assigned is `12345`
     - The default type assigned is `THREAD`
     - The default compression_level assigned is `1`
-    - The default screen capture resolution is `720 x 480` <br/>
-    - The default full screen option assigned is `0` (no full screen).
+    - The default screen capture resolution is `720 x 480`
+    - The default full screen option assigned is `0` (no full screen). <br/>
 `port := any available port` <br/>
 `type := LIST | THREAD` <br/>
 `compression_level := [1-6]` <br/>
