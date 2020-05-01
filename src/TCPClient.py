@@ -10,10 +10,10 @@ import numpy
 
 
 
-TEST = False # used for collecting data
-client_count = 0 # used for collecting data
-fps_count = 0 # used for collecting data
-fps = [] # used for collecting data
+# TEST = False # used for collecting data
+# client_count = 0 # used for collecting data
+# fps_count = 0 # used for collecting data
+# fps = [] # used for collecting data
 
 
 class TCPClient():
@@ -41,10 +41,10 @@ class TCPClient():
         global client_count, fps_count, fps
         # self.set_full_screen()
         self.resize_window()
-        f = ""
-        if TEST:
-            # f = open("../data/tcp/tcp_client_{}.txt".format(client_count), "w")
-            client_count += 1
+        # f = ""
+        # if TEST:
+        #     # f = open("../data/tcp/tcp_client_{}.txt".format(client_count), "w")
+        #     client_count += 1
         try:
             # continuous loop that gets frames from the server
             while True:
@@ -67,14 +67,14 @@ class TCPClient():
                     # display the frame
                     cv2.imshow("screen", frame)
                     print("{}".format(1 / (time.time() - last_time)))
-                    if TEST:
-                        if fps_count == 20:
-                            f.write(numpy.average(fps))
-                            fps_count = 0
-                            fps.clear()
-                        else:
-                            fps.append(1 / (time.time() - last_time))
-                            fps_count += 1
+                    # if TEST:
+                    #     if fps_count == 20:
+                    #         f.write(numpy.average(fps))
+                    #         fps_count = 0
+                    #         fps.clear()
+                    #     else:
+                    #         fps.append(1 / (time.time() - last_time))
+                    #         fps_count += 1
 
                     # checks if ESC is pressed. If so, then the screen sharing window will close
                     if cv2.waitKey(1) == 27:

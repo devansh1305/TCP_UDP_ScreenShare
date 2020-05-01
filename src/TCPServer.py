@@ -130,7 +130,7 @@ if __name__ == '__main__':
         process_type = LIST if (sys.argv[2] == "LIST") else THREAD
         tcp_server = TCPServer(int(sys.argv[1]), process_type, 720, 480, int(sys.argv[3]))
     elif len(sys.argv) == 5:
-         process_type = LIST if (sys.argv[2] == "LIST") else THREAD
+        process_type = LIST if (sys.argv[2] == "LIST") else THREAD
         tcp_server = TCPServer(int(sys.argv[1]), process_type, 720, 480, int(sys.argv[3]), int(sys.argv[4]))
     else:
         print("Invalid Arguments")
