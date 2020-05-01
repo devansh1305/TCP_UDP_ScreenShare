@@ -2,3 +2,5 @@ numpy
 opencv-python
 tkintertable
 mss
+zlib
+pickle
