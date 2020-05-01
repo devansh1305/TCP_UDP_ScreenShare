@@ -32,12 +32,12 @@ if __name__ == "__main__":
         host = sys.argv[1]
         port = int(sys.argv[2])                 
         if(sys.argv[3])=="TEST": TEST = True    # Dead Code
-        else:
-            client_count += 1                   # Dead Code
+        #else:
+            #client_count += 1                   # Dead Code
     elif len(sys.argv) == 5:
         host = sys.argv[1]
         port = int(sys.argv[2])
-        client_count += 1                       # Dead Code
+        #client_count += 1                       # Dead Code
         if(sys.argv[4])=="TEST": TEST = True    # Dead Code
     else:
         host = ""
