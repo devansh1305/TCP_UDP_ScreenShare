@@ -1,5 +1,7 @@
 # cs422_final_project
-Final Project for cs422 done in Python3
+
+A simple Server/Client implementation of a screen sharing application done with Python3.<br/>
+The application works on Windows 10 and MacOS Mojave Version 10.14.6
 
 ## Requirements
 - OpenCv
@@ -9,6 +11,7 @@ Final Project for cs422 done in Python3
 - Pickle
 - Zlib
 
+You can install the requirements with the following command: <br/>
 `pip3 install -r requirements.txt`
 
 ## Execution Arguments
@@ -17,4 +20,7 @@ You will need to get the hostname of your computer. You can do this by executing
 `hostname`
 
 - TCPServer.py
-    - yaya
+`port := any available port`
+`type := LIST | THREAD`
+`compression_level := [1-6]`
+`python3 TCPServer.py [port] [type] [compression_level]`
