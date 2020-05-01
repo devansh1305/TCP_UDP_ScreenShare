@@ -13,5 +13,8 @@ Final Project for cs422 done in Python3
 
 ## Execution Arguments
 
+You will need to get the hostname of your computer. You can do this by executing the following command in a Windows/MacOS terminal.
+`hostname`
+
 - TCPServer.py
     - yaya
