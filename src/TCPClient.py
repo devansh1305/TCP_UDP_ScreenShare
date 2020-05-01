@@ -38,7 +38,7 @@ class TCPClient():
         cv2.resizeWindow("screen", self.screen_width, self.screen_height)
 
     def run(self):
-        global client_count, fps_count, fps
+        # global client_count, fps_count, fps
         # self.set_full_screen()
         self.resize_window()
         # f = ""
