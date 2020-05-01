@@ -27,5 +27,7 @@ You will need to get the hostname of your computer. You can do this by executing
 `port := any available port` <br/>
 `type := LIST | THREAD` <br/>
 `compression_level := [1-6]` <br/>
-`full_screen := 0 | 1` <br/>
+`full_screen := 0 | 1` <br/> <br/>
 `python3 TCPServer.py [port] [type] [compression_level] [full_screen]` <br/>
+- TCPClient.py <br/> <br/>
+`python3 TCPClient.py hostname port`
