@@ -57,6 +57,7 @@ class TCPClient():
         global client_count, fps_count, fps
         # self.set_full_screen()
         self.resize_window()
+        f = ""
         if TEST:
             # f = open("../data/tcp/tcp_client_{}.txt".format(client_count), "w")
             client_count += 1
@@ -99,7 +100,8 @@ class TCPClient():
         finally:
             print("disconnected")
             self.client_socket.close()
-        # f.close()
+        # if TEST:
+            # f.close()
 if len(sys.argv) == 3:
     hostname = sys.argv[1]
     port = int(sys.argv[2])

@@ -96,23 +96,20 @@ class TCPServer():
                 return
             
 if __name__ == '__main__':
+    tcp_server = ""
     if len(sys.argv) < 2:
         tcp_server = TCPServer(12345, THREAD)
-        tcp_server.run()
     elif len(sys.argv) == 2:
         tcp_server = TCPServer(int(sys.argv[1]), THREAD)
-        tcp_server.run()
     elif len(sys.argv) == 3 and sys.argv[1] == "TEST":
         tcp_server = TCPServer(12345, LIST, 720, 480, int(sys.argv[2]))
-        tcp_server.run()
     elif len(sys.argv) == 3:
         process_type = LIST if (sys.argv[2] == "LIST") else THREAD
         tcp_server = TCPServer(int(sys.argv[1]), process_type)
-        tcp_server.run()
     elif len(sys.argv) == 4:
         process_type = LIST if (sys.argv[2] == "LIST") else THREAD
         tcp_server = TCPServer(int(sys.argv[1]), process_type, 720, 480, int(sys.argv[3]))
-        tcp_server.run()
     else:
         print("Invalid Arguments")
         sys.exit(1)
+    tcp_server.run()
