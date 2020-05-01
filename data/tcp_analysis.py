@@ -1,5 +1,6 @@
 import numpy
 
+# used to read the fps data collected for each client
 def tcp_client_num_fps(folder):
     tcp_list = []
     for x in range(3):
@@ -16,6 +17,7 @@ def tcp_client_num_fps(folder):
         fps_group.clear()
     return tcp_list
 
+# used to read the compression fps
 def tcp_compression_fps(folder):
     fps_list = []
     for x in range(1, 7):
@@ -41,6 +43,7 @@ print(tcplist_compression_fps)
 tcpthread_compression_fps = tcp_compression_fps("tcpthreadcompress")
 print(tcpthread_compression_fps)
 
+# creates a cvs file to upload onto google spreadsheets
 f = open("./tcp_client_fps.csv", "w")
 f.write('"Type","One Clients","Two Clients","Three Clients"\n')
 data = '"LIST"'
@@ -55,6 +58,7 @@ for fps in tcpthread_client_fps:
 f.write(data + "\n")
 f.close()
 
+# creates a cvs file to upload onto google spreadsheets
 f = open("./tcp_compression_level.csv", "w")
 data = '"Type"'
 for x in range(1, 7):
