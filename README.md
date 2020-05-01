@@ -20,7 +20,12 @@ You will need to get the hostname of your computer. You can do this by executing
 `hostname`
 
 - TCPServer.py <br/>
+    - The default port assigned is `12345`
+    - The default type assigned is `THREAD`
+    - The default compression_level assigned is `1`
+    - The default screen capture resolution is `720 x 480`
 `port := any available port` <br/>
 `type := LIST | THREAD` <br/>
 `compression_level := [1-6]` <br/>
-`python3 TCPServer.py [port] [type] [compression_level]` <br/>
+`full_screen := 0 | 1` <br/>
+`python3 TCPServer.py [port] [type] [compression_level] [full_screen]` <br/>
