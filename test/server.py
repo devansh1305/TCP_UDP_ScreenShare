@@ -1,64 +1,48 @@
 import socket
-import struct
+from threading import Thread
 import sys
-import time
-import mss
-import mss.tools
-import zlib
-import pickle
 import numpy
-import cv2
+import pickle
+import zlib
+import mss
+import numpy as np
+import cv2 as cv
+import tkinter as tk
 
-# import tkinter as tk
-# root = tk.Tk()
-# WIDTH = root.winfo_screenwidth()
-# HEIGHT = root.winfo_screenheight()
+addr = ("127.0.0.1", 65534)
+buf = 512
+width = 640
+height = 480
+#cap = cv.VideoCapture(0)
+root = tk.Tk()
+WIDTH = root.winfo_screenwidth()
+HEIGHT = root.winfo_screenheight()
+monitor = {"top": 0, "left": 0, "width": WIDTH, "height": HEIGHT}
 
-# monitor = {"top": 0, "left": 0, "width": WIDTH, "height": HEIGHT}
+#print(cap)
 
-# frame = mss.mss().grab(monitor)
-
-# cframe = zlib.compress(pickle.dumps(frame))
-
-
-# data = numpy.array(frame)
-
-# data = cv2.resize(data, (int(WIDTH * 0.75), int(HEIGHT * 0.75)))
-# print(len(zlib.compress(pickle.dumps(data), 6)))
+#cap.set(3, width)
+#cap.set(4, height)
+code = 'start'
+code = ('start' + (buf - len(code)) * 'a').encode('utf-8')
 
 
-# multicast_group = '224.3.29.71'
-# server_address = ('', 10000)
-
-# Create the socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-# Bind to the server address
-sock.bind(server_address)
-
-# Tell the operating system to add the socket to
-# the multicast group on all interfaces.
-group = socket.inet_aton(multicast_group)
-mreq = struct.pack('4sL', group, socket.INADDR_ANY)
-sock.setsockopt(
-    socket.IPPROTO_IP,
-    socket.IP_ADD_MEMBERSHIP,
-    mreq)
-
-# Receive/respond loop
-while True:
-    print('\nwaiting to receive message')
-    num = ''
-    data, address = sock.recvfrom(1024)
-    print(data.decode())
-    # while data.decode() != '\n':
-    #     print(data.decode())
-    #     num += data.decode()
-    #     data, address = sock.recvfrom(1)
-    data, address = sock.recvfrom(int(data.decode()))
-    print('received {} bytes from {}'.format(
-        len(data), address))
-    print(data)
-
-    print('sending acknowledgement to', address)
-    sock.sendto(b'ack', address)
+if __name__ == '__main__':
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    while(True):
+        #ret, frame = cap.read()
+        frame = numpy.array(mss.mss().grab(monitor))
+        if True:
+            s.sendto(code, addr)
+            data = frame.tostring()
+            for i in range(0, len(data), buf):
+                s.sendto(data[i:i+buf], addr)
+            #cv.imshow('send', frame)
+            # if cv.waitKey(1) & 0xFF == ord('q'):
+                # break
+        else:
+            break
+    # s.close()
+    # cap.release()
+    # cv.destroyAllWindows()
