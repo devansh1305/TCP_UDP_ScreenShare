@@ -1,7 +1,8 @@
 # cs422_final_project
 
 A simple Server/Client implementation of a screen sharing application done with Python3. <br/>
-The application works on Windows 10 and MacOS Mojave Version 10.14.6
+The application works on Windows 10 and MacOS Mojave Version 10.14.6. <br/>
+**Please note that there may still be some bugs with one to many connections as this is still under development** <br/>
 
 ## Requirements
 - OpenCv
