@@ -6,7 +6,12 @@ import pickle
 import zlib
 import time
 import tkinter as tk
+import numpy
 
+TEST = False
+client_count = 0
+fps_count = 0
+fps = []
 '''
 
 TODO STATS:
@@ -49,9 +54,12 @@ class TCPClient():
         cv2.resizeWindow("screen", self.screen_width, self.screen_height)
 
     def run(self):
+        global client_count, fps_count, fps
         # self.set_full_screen()
         self.resize_window()
-
+        if TEST:
+            # f = open("../data/tcp/tcp_client_{}.txt".format(client_count), "w")
+            client_count += 1
         try:
             # continuous loop that gets frames from the server
             while True:
@@ -73,7 +81,16 @@ class TCPClient():
                     frame = pickle.loads(zlib.decompress(dump))
                     # display the frame
                     cv2.imshow("screen", frame)
-                    print("fps: {}".format(1 / (time.time() - last_time)))
+                    print("{}".format(1 / (time.time() - last_time)))
+                    if TEST:
+                        if fps_count == 20:
+                            f.write(numpy.average(fps))
+                            fps_count = 0
+                            fps.clear()
+                        else:
+                            fps.append(1 / (time.time() - last_time))
+                            fps_count += 1
+
                     # checks if ESC is pressed. If so, then the screen sharing window will close
                     if cv2.waitKey(1) == 27:
                         break
@@ -82,12 +99,21 @@ class TCPClient():
         finally:
             print("disconnected")
             self.client_socket.close()
-
+        # f.close()
 if len(sys.argv) == 3:
     hostname = sys.argv[1]
     port = int(sys.argv[2])
     tcp_client = TCPClient(hostname, port)
     tcp_client.run()
+elif len(sys.argv) == 2 and sys.argv[1] == "TEST":
+    TEST = False
+    hostname = "kevins-MBP-2.nyc.rr.com"
+    port = 12345
+    tcp_client0 = TCPClient(hostname, port).run()
+    # tcp_client1 = TCPClient(hostname, port).run()
+    # tcp_client2 = TCPClient(hostname, port).run()
+    # tcp_client3 = TCPClient(hostname, port).run()
+    # tcp_client4 = TCPClient(hostname, port).run()
 else:
     print("invalid arguments")
     sys.exit(1)

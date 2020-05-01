@@ -96,10 +96,13 @@ class TCPServer():
             
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        tcp_server = TCPServer(12345, LIST)
+        tcp_server = TCPServer(12345, THREAD)
         tcp_server.run()
     elif len(sys.argv) == 2:
-        tcp_server = TCPServer(int(sys.argv[1]), LIST)
+        tcp_server = TCPServer(int(sys.argv[1]), THREAD)
+        tcp_server.run()
+    elif len(sys.argv) == 3 and sys.argv[1] == "TEST":
+        tcp_server = TCPServer(12345, LIST, 720, 480, int(sys.argv[2]))
         tcp_server.run()
     elif len(sys.argv) == 3:
         process_type = LIST if (sys.argv[2] == "LIST") else THREAD
