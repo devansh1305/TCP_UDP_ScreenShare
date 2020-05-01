@@ -19,7 +19,7 @@ def align_buffer(my_client):
 
 if __name__ == "__main__":
     TEST = False
-    client_count = 0
+    #client_count = 0   Used for telemetry
     # fps_count = 0
     # fps = []
 
