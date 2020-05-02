@@ -1,4 +1,4 @@
-# cs422_final_project
+# TCP_UDP_ScreenShare
 
 A simple Server/Client implementation of a screen sharing application done with Python3. <br/>
 The TCP/UDP application works on Windows 10 and TCP application works on MacOS Mojave Version 10.14.6. <br/>
