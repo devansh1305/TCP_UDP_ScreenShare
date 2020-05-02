@@ -7,37 +7,6 @@ import math
 import mss
 import cv2 as cv
 
-'''
-TODO: 
-    one client:
-        run server
-        cat client fps output to one file
-    two client:
-        run server
-        cat client 1 fps output to a file
-        cat client 2 fps output to another file
-    three client:
-        run server
-        cat client 1 fps output to a file
-        cat client 2 fps output to another file
-        ...
-    ...
-    five client:
-        ...
-
-    analyzing data:
-        one client:
-            get average of fps in fps file
-        two client:
-            get average of fps for client one
-            get average of fps for client two
-            average the two fps ^
-        three client:
-            ...
-        ...
-        five client:
-            ...
-'''
 
 # Class to fragment image frame into multiple segments
 class FrameSegment(object):
