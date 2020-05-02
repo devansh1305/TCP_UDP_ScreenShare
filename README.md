@@ -1,7 +1,7 @@
 # cs422_final_project
 
 A simple Server/Client implementation of a screen sharing application done with Python3. <br/>
-The application works on Windows 10 and MacOS Mojave Version 10.14.6. <br/>
+The TCP/UDP application works on Windows 10 and TCP application works on MacOS Mojave Version 10.14.6. <br/>
 **Please note that there may still be some bugs with one to many connections as this is still under development** <br/>
 
 ## Requirements
@@ -48,3 +48,9 @@ Available Commands <br/>
 `python3 UDPServer.py [host] [port]` <br/>
 `python3 UDPServer.py r [width] [height]` <br/>
 `python3 UDPServer.py [host] [port] [width] [height]` <br/>
+
+- UDPClient.py <br/>
+`python3 UDPClient.py` <br/>
+`python3 UDPClient.py [host]` <br/>
+`python3 UDPClient.py [host] [port]` <br/>
+    
