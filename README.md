@@ -30,7 +30,21 @@ You will need to get the hostname of your computer. You can do this by executing
 `type := LIST | THREAD` <br/>
 `compression_level := [1-6]` <br/>
 `full_screen := 0 | 1` <br/> <br/>
-`python3 TCPServer.py [port] [type] [compression_level] [full_screen]` <br/>
+`python3 TCPServer.py` <br/>
+`python3 TCPServer.py port type` <br/>
+`python3 TCPServer.py port type compression_level` <br/>
+`python3 TCPServer.py port type compression_level full_screen` <br/>
 - TCPClient.py <br/>
     - There are no default assignments. You need to pass the hostname and port as arguments. <br/> <br/>
 `python3 TCPClient.py hostname port`
+
+- UDPServer.py <br/>
+    - The default port assigned is `12345`
+    - The default screen capture resolution is `720 x 480` <br/>
+`port := any available port` <br/>\
+Available Commands <br/>
+`python3 UDPServer.py` <br/>
+`python3 UDPServer.py [port]` <br/>
+`python3 UDPServer.py [host] [port]` <br/>
+`python3 UDPServer.py r [width] [height]` <br/>
+`python3 UDPServer.py [host] [port] [width] [height]` <br/>
