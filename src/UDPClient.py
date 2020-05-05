@@ -56,7 +56,7 @@ if __name__ == "__main__":
         # f = open("../data/udp/udp_client_{}.txt".format(client_count), "w")
     while True:
         # Start Recording fps
-        last_time = time.time()
+        # last_time = time.time()
         
         segment, addr = my_client.recvfrom(IMG_DATA_SIZE_MAX)
         if struct.unpack("B", segment[0:1])[0] > 1:
@@ -67,7 +67,7 @@ if __name__ == "__main__":
             # img = cv2.imdecode(np.frombuffer(data, dtype=np.uint8), 1)
             cv2.imshow('frame', img)
             
-            print("{}".format(1 / (time.time() - last_time)))
+            #print("{}".format(1 / (time.time() - last_time)))
             
             # if TEST:
                 # if fps_count == 20:
